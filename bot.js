@@ -15,10 +15,11 @@ puppeteer.use(
 		visualFeedback: true // colorize reCAPTCHAs (violet = detected, green = solved)
 	})
 );
+const text = 'Os dados de acesso não estão corretos'
 
 async function checkLogin(login, pass) {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     args: ["--no-sandbox", "--disable-setuid-sandbox", "--start-maximized"],
     defaultViewport: null,
     executablePath: executablePath(),
@@ -55,10 +56,17 @@ async function checkLogin(login, pass) {
   await page.click("button.animation ");
   
   await setTimeout(4000);
-  await browser.close();
 
-    if(actualPage === page.url()) return false
+  try {
+    await page.waitForFunction(
+      text => document.querySelector('body').innerText.includes(text),
+      {},
+      text
+    );
+    return false
+  } catch(e) {
     return true
+  }
 
 }
 module.exports = {
