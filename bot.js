@@ -19,7 +19,7 @@ const text = 'Os dados de acesso não estão corretos'
 
 async function checkLogin(login, pass) {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox", "--start-maximized"],
     defaultViewport: null,
     executablePath: executablePath(),
